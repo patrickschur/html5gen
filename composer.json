@@ -5,8 +5,8 @@
   "keywords": ["html", "html-builder", "php", "builder", "generator"],
   "homepage": "https://github.com/patrickschur/html5gen",
   "license": "MIT",
-  "minimum-stability": true,
-  "prefer-stable": "stable",
+  "minimum-stability": "stable",
+  "prefer-stable": true,
   "authors": [
     {
       "name": "Patrick Schur",
@@ -14,7 +14,9 @@
     }
   ],
   "autoload": {
-    "Html5Gen\\": "src/Html5Gen"
+    "psr-4": {
+      "Html5Gen\\": "src/Html5Gen"
+    }
   },
   "require": {
     "php": ">=5.5"
