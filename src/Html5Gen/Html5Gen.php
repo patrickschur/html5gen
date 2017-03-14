@@ -208,7 +208,7 @@ class Html5Gen
             self::$parentNodes[] = $elem;
             $retVal = $arguments[1]();
 
-            if (is_iterable($retVal))
+            if ($retVal instanceof \Traversable)
             {
                 foreach ($retVal as $value)
                 {
