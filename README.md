@@ -148,7 +148,7 @@ outputs:
 ```
 
 #### [TODO] Checklist:
-- [ ] Exists the attribute for the element?
+- [x] Exists the attribute for the element? (Find a better implementation of that!)
 - [ ] Is the given attribute value allowed for the specified attribute?
 - [ ] Is the element allowed in the current element?
 - [ ] Check the document for bad practices. For example duplicate id references.

@@ -165,8 +165,8 @@ class Html5Gen
     { }
 
     /**
-     * @param $name
-     * @param $arguments
+     * @param string $name
+     * @param array $arguments
      * @return string
      */
     public static function __callStatic($name, $arguments)
@@ -185,6 +185,8 @@ class Html5Gen
 
         if (isset($arguments[0]) && is_array($arguments[0]))
         {
+            self::validateTagsAndAttributes($elem->tagName, $arguments[0]);
+
             foreach ($arguments[0] as $attrName => $attrValue)
             {
                 $attrValue = strval($attrValue);
@@ -227,6 +229,489 @@ class Html5Gen
         }
 
         return $elem->ownerDocument->saveHTML($elem);
+    }
+
+    /**
+     * @param string $tag
+     * @param array &$attrs
+     * @throws \InvalidArgumentException if there was found a not supported element
+     * @return void
+     */
+    private static function validateTagsAndAttributes($tag, &$attrs)
+    {
+        $globalAttrs = [
+            'accesskey',
+            'class',
+            'contenteditable',
+            'contextmenu',
+            'dir',
+            'draggable',
+            'dropzone',
+            'hidden',
+            'id',
+            'itemid',
+            'itemprop',
+            'itemref',
+            'itemscope',
+            'itemtype',
+            'lang',
+            'spellcheck',
+            'style',
+            'tabindex',
+            'title',
+            'translate',
+            'onabort',
+            'onautocomplete',
+            'onautocompleteerror',
+            'onblur',
+            'oncancel',
+            'oncanplay',
+            'oncanplaythrough',
+            'onchange',
+            'onclick',
+            'onclose',
+            'oncontextmenu',
+            'oncuechange',
+            'ondblclick',
+            'ondrag',
+            'ondragend',
+            'ondragenter',
+            'ondragexit',
+            'ondragleave',
+            'ondragover',
+            'ondragstart',
+            'ondrop',
+            'ondurationchange',
+            'onemptied',
+            'onended',
+            'onerror',
+            'onfocus',
+            'oninput',
+            'oninvalid',
+            'onkeydown',
+            'onkeypress',
+            'onkeyup',
+            'onload',
+            'onloadeddata',
+            'onloadedmetadata',
+            'onloadstart',
+            'onmousedown',
+            'onmouseenter',
+            'onmouseleave',
+            'onmousemove',
+            'onmouseout',
+            'onmouseover',
+            'onmouseup',
+            'onmousewheel',
+            'onpause',
+            'onplay',
+            'onplaying',
+            'onprogress',
+            'onratechange',
+            'onreset',
+            'onresize',
+            'onscroll',
+            'onseeked',
+            'onseeking',
+            'onselect',
+            'onshow',
+            'onsort',
+            'onstalled',
+            'onsubmit',
+            'onsuspend',
+            'ontimeupdate',
+            'ontoggle',
+            'onvolumechange',
+            'onwaiting'
+        ];
+
+        switch ($tag)
+        {
+            case 'html':
+            case 'head':
+            case 'title':
+            case 'address':
+            case 'article':
+            case 'aside':
+            case 'body':
+            case 'footer':
+            case 'header':
+            case 'h1':
+            case 'h2':
+            case 'h3':
+            case 'h4':
+            case 'h5':
+            case 'h6':
+            case 'nav':
+            case 'section':
+            case 'blockquote':
+            case 'dd':
+            case 'div':
+            case 'dl':
+            case 'dt':
+            case 'figcaption':
+            case 'figure':
+            case 'hr':
+            case 'main':
+            case 'p':
+            case 'pre':
+            case 'ul':
+            case 'abbr':
+            case 'b':
+            case 'bdi':
+            case 'bdo':
+            case 'br':
+            case 'cite':
+            case 'code':
+            case 'dfn':
+            case 'em':
+            case 'i':
+            case 'kbd':
+            case 'mark':
+            case 'rb':
+            case 'rp':
+            case 'rt':
+            case 'rtc':
+            case 'ruby':
+            case 's':
+            case 'samp':
+            case 'small':
+            case 'span':
+            case 'strong':
+            case 'sub':
+            case 'sup':
+            case 'noscript':
+            case 'u':
+            case 'var':
+            case 'wbr':
+            case 'template':
+            case 'caption':
+            case 'col':
+            case 'colgroup':
+            case 'table':
+            case 'tbody':
+            case 'tfoot':
+            case 'thead':
+            case 'tr':
+            case 'datalist':
+            case 'picture':
+            case 'iframe':
+            case 'legend':
+                break;
+            case 'base':
+                $globalAttrs[] = 'href';
+                $globalAttrs[] = 'target';
+                break;
+            case 'link':
+                $globalAttrs[] = 'crossorigin';
+                $globalAttrs[] = 'href';
+                $globalAttrs[] = 'hreflang';
+                $globalAttrs[] = 'integrity';
+                $globalAttrs[] = 'media';
+                $globalAttrs[] = 'prefetch';
+                $globalAttrs[] = 'referrerpolicy';
+                $globalAttrs[] = 'rel';
+                $globalAttrs[] = 'sizes';
+                $globalAttrs[] = 'type';
+                break;
+            case 'meta':
+                $globalAttrs[] = 'charset';
+                $globalAttrs[] = 'http-equiv';
+                $globalAttrs[] = 'name';
+                $globalAttrs[] = 'content';
+                break;
+            case 'style':
+                $globalAttrs[] = 'type';
+                $globalAttrs[] = 'media';
+                break;
+            case 'li':
+                $globalAttrs[] = 'value';
+                break;
+            case 'ol':
+                $globalAttrs[] = 'reversed';
+                $globalAttrs[] = 'start';
+                $globalAttrs[] = 'value';
+                break;
+            case 'a':
+                $globalAttrs[] = 'download';
+                $globalAttrs[] = 'href';
+                $globalAttrs[] = 'hreflang';
+                $globalAttrs[] = 'referrerpolicy';
+                $globalAttrs[] = 'rel';
+                $globalAttrs[] = 'target';
+                $globalAttrs[] = 'type';
+                break;
+            case 'data':
+                $globalAttrs[] = 'value';
+                break;
+            case 'q':
+                $globalAttrs[] = 'cite';
+                break;
+            case 'time':
+                $globalAttrs[] = 'datetime';
+                break;
+            case 'ins':
+            case 'del':
+                $globalAttrs[] = 'cite';
+                $globalAttrs[] = 'datetime';
+                break;
+            case 'dialog':
+            case 'details':
+                $globalAttrs[] = 'open';
+                break;
+            case 'menu':
+                $globalAttrs[] = 'label';
+                $globalAttrs[] = 'type';
+                break;
+            case 'menuitem':
+                $globalAttrs[] = 'checked';
+                $globalAttrs[] = 'command';
+                $globalAttrs[] = 'default';
+                $globalAttrs[] = 'disabled';
+                $globalAttrs[] = 'icon';
+                $globalAttrs[] = 'label';
+                $globalAttrs[] = 'radiogroup';
+                $globalAttrs[] = 'type';
+                break;
+            case 'summary':
+                break;
+            case 'canvas':
+                $globalAttrs[] = 'height';
+                $globalAttrs[] = 'width';
+                break;
+            case 'script':
+                $globalAttrs[] = 'async';
+                $globalAttrs[] = 'defer';
+                $globalAttrs[] = 'integrity';
+                $globalAttrs[] = 'src';
+                $globalAttrs[] = 'type';
+                $globalAttrs[] = 'text';
+                $globalAttrs[] = 'crossorigin';
+                $globalAttrs[] = '';
+                break;
+            case 'td':
+                $globalAttrs[] = 'colspan';
+                $globalAttrs[] = 'rowspan';
+                $globalAttrs[] = 'headers';
+                break;
+            case 'th':
+                $globalAttrs[] = 'colspan';
+                $globalAttrs[] = 'rowspan';
+                $globalAttrs[] = 'headers';
+                $globalAttrs[] = 'scope';
+                break;
+            case 'button':
+                $globalAttrs[] = 'autofocus';
+                $globalAttrs[] = 'disabled';
+                $globalAttrs[] = 'form';
+                $globalAttrs[] = 'formaction';
+                $globalAttrs[] = 'formmethod';
+                $globalAttrs[] = 'formenctype';
+                $globalAttrs[] = 'formnovalidate';
+                $globalAttrs[] = 'formtarget';
+                $globalAttrs[] = 'name';
+                $globalAttrs[] = 'type';
+                $globalAttrs[] = 'value';
+                break;
+            case 'fieldset':
+                $globalAttrs[] = 'disabled';
+                $globalAttrs[] = 'form';
+                $globalAttrs[] = 'name';
+                break;
+            case 'form':
+                $globalAttrs[] = 'accept-charset';
+                $globalAttrs[] = 'action';
+                $globalAttrs[] = 'autocomplete';
+                $globalAttrs[] = 'enctype';
+                $globalAttrs[] = 'method';
+                $globalAttrs[] = 'name';
+                $globalAttrs[] = 'novalidate';
+                $globalAttrs[] = 'target';
+                break;
+            case 'input':
+                $globalAttrs[] = 'type';
+                $globalAttrs[] = 'accept';
+                $globalAttrs[] = 'autocomplete';
+                $globalAttrs[] = 'autofocus';
+                $globalAttrs[] = 'capture';
+                $globalAttrs[] = 'checked';
+                $globalAttrs[] = 'disabled';
+                $globalAttrs[] = 'form';
+                $globalAttrs[] = 'formmethod';
+                $globalAttrs[] = 'formaction';
+                $globalAttrs[] = 'formenctype';
+                $globalAttrs[] = 'formnovalidate';
+                $globalAttrs[] = 'formtarget';
+                $globalAttrs[] = 'height';
+                $globalAttrs[] = 'inputmode';
+                $globalAttrs[] = 'list';
+                $globalAttrs[] = 'min';
+                $globalAttrs[] = 'max';
+                $globalAttrs[] = 'maxlength';
+                $globalAttrs[] = 'minlength';
+                $globalAttrs[] = 'multiple';
+                $globalAttrs[] = 'name';
+                $globalAttrs[] = 'pattern';
+                $globalAttrs[] = 'placeholder';
+                $globalAttrs[] = 'readonly';
+                $globalAttrs[] = 'required';
+                $globalAttrs[] = 'selectionDirection';
+                $globalAttrs[] = 'selectionEnd';
+                $globalAttrs[] = 'selectionStart';
+                $globalAttrs[] = 'size';
+                $globalAttrs[] = 'src';
+                $globalAttrs[] = 'step';
+                $globalAttrs[] = 'value';
+                $globalAttrs[] = 'width';
+                break;
+            case 'label':
+                $globalAttrs[] = 'for';
+                break;
+            case 'meter':
+                $globalAttrs[] = 'value';
+                $globalAttrs[] = 'min';
+                $globalAttrs[] = 'max';
+                $globalAttrs[] = 'low';
+                $globalAttrs[] = 'high';
+                $globalAttrs[] = 'optimum';
+                $globalAttrs[] = 'form';
+                break;
+            case 'optgroup':
+                $globalAttrs[] = 'disabled';
+                $globalAttrs[] = 'label';
+                break;
+            case 'option':
+                $globalAttrs[] = 'disabled';
+                $globalAttrs[] = 'label';
+                $globalAttrs[] = 'selected';
+                $globalAttrs[] = 'value';
+                break;
+            case 'output':
+                $globalAttrs[] = 'for';
+                $globalAttrs[] = 'form';
+                $globalAttrs[] = 'name';
+                break;
+            case 'progress':
+                $globalAttrs[] = 'value';
+                $globalAttrs[] = 'max';
+                break;
+            case 'select':
+                $globalAttrs[] = 'autofocus';
+                $globalAttrs[] = 'disabled';
+                $globalAttrs[] = 'form';
+                $globalAttrs[] = 'multiple';
+                $globalAttrs[] = 'name';
+                $globalAttrs[] = 'required';
+                $globalAttrs[] = 'size';
+                break;
+            case 'textarea':
+                $globalAttrs[] = 'autocomplete';
+                $globalAttrs[] = 'autofocus';
+                $globalAttrs[] = 'cols';
+                $globalAttrs[] = 'disabled';
+                $globalAttrs[] = 'form';
+                $globalAttrs[] = 'maxlength';
+                $globalAttrs[] = 'minlength';
+                $globalAttrs[] = 'name';
+                $globalAttrs[] = 'placeholder';
+                $globalAttrs[] = 'readonly';
+                $globalAttrs[] = 'required';
+                $globalAttrs[] = 'rows';
+                $globalAttrs[] = 'selectionDirection';
+                $globalAttrs[] = 'selectionEnd';
+                $globalAttrs[] = 'selectionStart';
+                $globalAttrs[] = 'wrap';
+                break;
+            case 'area':
+                $globalAttrs[] = 'alt';
+                $globalAttrs[] = 'coords';
+                $globalAttrs[] = 'download';
+                $globalAttrs[] = 'href';
+                $globalAttrs[] = 'hreflang';
+                $globalAttrs[] = 'media';
+                $globalAttrs[] = 'referrerpolicy';
+                $globalAttrs[] = 'ref';
+                $globalAttrs[] = 'shape';
+                $globalAttrs[] = 'target';
+                break;
+            case 'audio':
+                $globalAttrs[] = 'autoplay';
+                $globalAttrs[] = 'buffered';
+                $globalAttrs[] = 'controls';
+                $globalAttrs[] = 'loop';
+                $globalAttrs[] = 'muted';
+                $globalAttrs[] = 'played';
+                $globalAttrs[] = 'preload';
+                $globalAttrs[] = 'src';
+                $globalAttrs[] = 'volume';
+                break;
+            case 'embed':
+                $globalAttrs[] = 'height';
+                $globalAttrs[] = 'src';
+                $globalAttrs[] = 'type';
+                $globalAttrs[] = 'width';
+                break;
+            case 'img':
+                $globalAttrs[] = 'alt';
+                $globalAttrs[] = 'crossorigin';
+                $globalAttrs[] = 'height';
+                $globalAttrs[] = 'longdesc';
+                $globalAttrs[] = 'referrerpolicy';
+                $globalAttrs[] = 'sizes';
+                $globalAttrs[] = 'src';
+                $globalAttrs[] = 'width';
+                $globalAttrs[] = 'usemap';
+                break;
+            case 'map':
+            case 'param':
+                $globalAttrs[] = 'name';
+                break;
+            case 'object':
+                $globalAttrs[] = 'form';
+                $globalAttrs[] = 'height';
+                $globalAttrs[] = 'name';
+                $globalAttrs[] = 'type';
+                $globalAttrs[] = 'typemustmatch';
+                $globalAttrs[] = 'usemap';
+                $globalAttrs[] = 'width';
+                break;
+            case 'source':
+                $globalAttrs[] = 'sizes';
+                $globalAttrs[] = 'src';
+                $globalAttrs[] = 'srcset';
+                $globalAttrs[] = 'type';
+                $globalAttrs[] = 'media';
+                break;
+            case 'track':
+                $globalAttrs[] = 'default';
+                $globalAttrs[] = 'kind';
+                $globalAttrs[] = 'label';
+                $globalAttrs[] = 'src';
+                $globalAttrs[] = 'srclang';
+                break;
+            case 'video':
+                $globalAttrs[] = 'autoplay';
+                $globalAttrs[] = 'buffered';
+                $globalAttrs[] = 'controls';
+                $globalAttrs[] = 'crossorigin';
+                $globalAttrs[] = 'height';
+                $globalAttrs[] = 'loop';
+                $globalAttrs[] = 'muted';
+                $globalAttrs[] = 'played';
+                $globalAttrs[] = 'preload';
+                $globalAttrs[] = 'poster';
+                $globalAttrs[] = 'width';
+                break;
+            default:
+                throw new \InvalidArgumentException("Invalid element was found.");
+        }
+
+        $clearDataAttrs = function ($attr) use (&$globalAttrs) {
+            return in_array($attr, $globalAttrs) || strpos($attr, 'data-') === 0 || strpos($attr, 'aria-') === 0;
+        };
+
+        $attrs = array_filter($attrs, $clearDataAttrs, ARRAY_FILTER_USE_KEY);
+        return;
     }
 
     /**

@@ -29,7 +29,6 @@ HTML;
 
     public function testScript()
     {
-
         $html =
         H::html([], function() {
             H::head([]);
@@ -48,6 +47,20 @@ HTML;
 </html>
 
 HTML;
+
+        $this->assertEquals($expect, $html);
+    }
+
+    public function testNonExistingAttributes()
+    {
+        $html = H::html(['data-lang' => 'de-DE', 'foo' => 'bar']);
+
+        $expect = <<<HTML
+<!DOCTYPE html>
+<html data-lang="de-DE"></html>
+
+HTML;
+
 
         $this->assertEquals($expect, $html);
     }
