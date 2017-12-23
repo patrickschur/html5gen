@@ -196,7 +196,11 @@ class Html5Gen
                     $attrName = $attrValue;
                 }
 
-                $elem->setAttribute($attrName, $attrValue);
+                if (self::isVisible($elem->tagName, $attrName, $attrValue) ||
+                    $attrValue != false && $attrValue != "false")
+                {
+                    $elem->setAttribute($attrName, $attrValue);
+                }
             }
         }
 
@@ -208,7 +212,7 @@ class Html5Gen
         if (isset($arguments[1]) && is_callable($arguments[1]))
         {
             self::$parentNodes[] = $elem;
-            $retVal = $arguments[1]();
+            $retVal = $arguments[1]($elem);
 
             if ($retVal instanceof \Traversable)
             {
@@ -229,6 +233,21 @@ class Html5Gen
         }
 
         return $elem->ownerDocument->saveHTML($elem);
+    }
+
+    private static function isVisible($elem, $attrName, $attrValue)
+    {
+        $html = new \DOMDocument();
+
+        $elem = $html->createElement($elem);
+        $elem->setAttribute($attrName, $attrValue);
+        $html->appendChild($elem);
+
+        if ($attrValue && strpos($html->saveHTML(), $attrValue) !== false) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
