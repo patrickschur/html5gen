@@ -3,7 +3,6 @@ html5gen
 [![Build Status](https://travis-ci.org/patrickschur/html5gen.svg?branch=master)](https://travis-ci.org/patrickschur/html5gen)
 [![codecov](https://codecov.io/gh/patrickschur/html5gen/branch/master/graph/badge.svg)](https://codecov.io/gh/patrickschur/html5gen)
 [![Version](https://img.shields.io/packagist/v/patrickschur/html5gen.svg?style=flat-square)](https://packagist.org/packages/patrickschur/html5gen)
-[![Maintenance](https://img.shields.io/maintenance/yes/2018.svg?style=flat-square)](https://github.com/patrickschur/html5gen)
 [![Minimum PHP Version](https://img.shields.io/badge/php-%3E%3D%205.5-FF.svg?style=flat-square)](http://php.net/)
 [![License](https://img.shields.io/packagist/l/patrickschur/html5gen.svg?style=flat-square)](https://opensource.org/licenses/MIT)
 

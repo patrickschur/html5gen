@@ -5,7 +5,7 @@ namespace Html5Gen;
 /**
  * Class Html5Gen
  *
- * @copyright 2017 Patrick Schur
+ * @copyright Patrick Schur
  * @license https://opensource.org/licenses/mit-license.html MIT
  * @author Patrick Schur <patrick_schur@outlook.de>
  * @package Html5Gen
